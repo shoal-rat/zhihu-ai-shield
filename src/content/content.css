@@ -1,0 +1,144 @@
+.zas-card-blocked {
+  position: relative !important;
+  border: 1px solid rgba(37, 99, 235, 0.18) !important;
+  border-radius: 8px !important;
+  background: #f8fafc !important;
+}
+
+.zas-card-blocked.zas-mode-rewrite > :not(.zas-shield),
+.zas-card-blocked.zas-mode-collapse > :not(.zas-shield) {
+  display: none !important;
+}
+
+.zas-card-blocked.zas-mode-collapse {
+  min-height: 84px !important;
+}
+
+.zas-card-blocked.zas-mode-blur > :not(.zas-shield) {
+  filter: blur(9px) saturate(0.35) !important;
+  opacity: 0.28 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.zas-shield {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 84px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  padding: 16px !important;
+  color: #0f172a !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  border-radius: 8px !important;
+  z-index: 2147483000 !important;
+}
+
+.zas-mode-blur > .zas-shield {
+  position: absolute !important;
+  inset: 12px !important;
+  height: auto !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12) !important;
+}
+
+.zas-shield-main {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.zas-mark {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 8px !important;
+  background: #2563eb !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.zas-copy {
+  min-width: 0 !important;
+}
+
+.zas-title {
+  color: #0f172a !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.zas-meta {
+  margin-top: 3px !important;
+  color: #475569 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.zas-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-top: 8px !important;
+}
+
+.zas-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 22px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  background: #e0f2fe !important;
+  color: #075985 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+
+.zas-actions {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  flex: 0 0 auto !important;
+}
+
+.zas-actions button {
+  appearance: none !important;
+  height: 32px !important;
+  padding: 0 10px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 7px !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  line-height: 30px !important;
+  cursor: pointer !important;
+}
+
+.zas-actions button:hover {
+  border-color: #2563eb !important;
+  color: #1d4ed8 !important;
+}
+
+@media (max-width: 640px) {
+  .zas-shield {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .zas-actions {
+    justify-content: flex-start !important;
+    width: 100% !important;
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "zhihu-ai-shield",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "知乎 AI 清净器：用本地或私有模型自动识别并屏蔽低质量知乎作者。",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check-manifest.mjs && node --test tests/*.test.mjs"
+  },
+  "keywords": [
+    "zhihu",
+    "browser-extension",
+    "ai-filter",
+    "content-moderation"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}

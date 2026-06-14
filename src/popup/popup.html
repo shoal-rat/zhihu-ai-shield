@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>知乎 AI 清净器</title>
+    <link rel="stylesheet" href="./popup.css">
+  </head>
+  <body>
+    <main class="popup">
+      <header class="hero">
+        <div>
+          <div class="eyebrow">Zhihu AI Shield</div>
+          <h1>知乎 AI 清净器</h1>
+        </div>
+        <label class="switch" title="启用或暂停屏蔽">
+          <input id="enabled" type="checkbox">
+          <span></span>
+        </label>
+      </header>
+
+      <section class="stats" aria-label="统计">
+        <div>
+          <strong id="blocked">0</strong>
+          <span>已挡下</span>
+        </div>
+        <div>
+          <strong id="scanned">0</strong>
+          <span>已检查</span>
+        </div>
+        <div>
+          <strong id="decisionCount">0</strong>
+          <span>缓存作者</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="row">
+          <span>模型</span>
+          <strong id="model">-</strong>
+        </div>
+        <div class="row">
+          <span>阈值</span>
+          <strong id="threshold">-</strong>
+        </div>
+        <div class="row">
+          <span>模式</span>
+          <strong id="hideMode">-</strong>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">最近判断</div>
+        <div id="events" class="events empty">暂无记录</div>
+      </section>
+
+      <footer class="actions">
+        <button id="openOptions" type="button">设置</button>
+        <button id="exportData" type="button">导出</button>
+        <button id="clearCache" type="button">清缓存</button>
+      </footer>
+      <div id="toast" class="toast" role="status"></div>
+    </main>
+    <script src="./popup.js"></script>
+  </body>
+</html>
