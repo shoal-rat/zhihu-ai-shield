@@ -7,10 +7,8 @@ export const STORAGE_KEYS = Object.freeze({
 
 export const DEFAULT_SETTINGS = Object.freeze({
   enabled: true,
-  aiEnabled: true,
   endpoint: "http://127.0.0.1:11434/v1/chat/completions",
-  model: "qwen3:0.6b",
-  apiKey: "",
+  model: "qwen2.5:0.5b",
   threshold: 0.72,
   confidenceFloor: 0.42,
   hideMode: "rewrite",
@@ -19,8 +17,8 @@ export const DEFAULT_SETTINGS = Object.freeze({
   minTextLength: 24,
   cacheTtlHours: 168,
   fetchRecentContent: true,
-  keywordFallbackEnabled: true,
   showReason: true,
+  guestMode: true,
   allowList: [],
   blockList: []
 });
@@ -57,7 +55,6 @@ export function mergeSettings(input = {}) {
   merged.blockList = normalizeList(merged.blockList);
   merged.endpoint = String(merged.endpoint || "").trim();
   merged.model = String(merged.model || "").trim();
-  merged.apiKey = String(merged.apiKey || "").trim();
   return merged;
 }
 

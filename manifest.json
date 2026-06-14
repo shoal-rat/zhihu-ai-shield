@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "知乎 AI 清净器",
   "short_name": "知乎清净器",
-  "version": "0.1.0",
-  "description": "用本地或私有模型自动识别知乎低质量作者，把争吵、钓鱼、阴阳怪气挡在屏幕外。",
+  "version": "0.1.1",
+  "description": "用本机小模型自动识别知乎低质量作者，把争吵、钓鱼、阴阳怪气挡在屏幕外。",
   "icons": {
     "16": "icons/icon.svg",
     "48": "icons/icon.svg",
@@ -41,11 +41,6 @@
     "https://zhuanlan.zhihu.com/*",
     "https://*.zhihu.com/*",
     "http://127.0.0.1:*/*",
-    "http://localhost:*/*",
-    "https://api.openai.com/*",
-    "https://api.deepseek.com/*",
-    "https://api.siliconflow.cn/*",
-    "https://openrouter.ai/*",
-    "https://dashscope.aliyuncs.com/*"
+    "http://localhost:*/*"
   ]
 }

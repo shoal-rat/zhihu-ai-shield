@@ -2,9 +2,7 @@ import { DEFAULT_SETTINGS, EMPTY_STATS, STORAGE_KEYS, mergeSettings } from "./sh
 import {
   SYSTEM_PROMPT,
   buildClassificationPrompt,
-  combineDecisions,
   hashText,
-  heuristicDecision,
   normalizeDecision,
   parseModelDecision
 } from "./shared/classifier.js";
@@ -71,6 +69,9 @@ async function handleMessage(message, sender) {
 async function analyzeAuthor(payload) {
   const settings = await getSettings();
   if (!settings.enabled) return { ok: true, status: "disabled" };
+  if (payload.guestVisible && !settings.guestMode) {
+    return { ok: true, status: "ignored", reason: "游客兼容已关闭" };
+  }
 
   const author = normalizeAuthor(payload.author || payload);
   const key = makeAuthorKey(author);
@@ -132,27 +133,27 @@ async function runAnalysis({ payload, author, key, settings }) {
     return makeResponse("allowed", { author, key, decision, source: "short-text", settings });
   }
 
-  const heuristic = heuristicDecision({ samples });
-  let decision = heuristic;
-  let source = "heuristic";
+  if (!settings.endpoint || !settings.model) {
+    const decision = manualDecision(false, "本机 LLM 未配置，未处理");
+    await addEvent({ type: "error", author, error: decision.reason, source: "local-llm-missing" });
+    await incrementStats("errors");
+    return makeResponse("allowed", { author, key, decision, source: "local-llm-missing", settings });
+  }
 
-  if (settings.aiEnabled && settings.endpoint && settings.model) {
-    try {
-      const modelDecision = await classifyWithModel({ author, samples, settings });
-      decision = combineDecisions(modelDecision, heuristic, settings.threshold, settings.confidenceFloor);
-      source = "model";
-    } catch (error) {
-      decision = settings.keywordFallbackEnabled ? heuristic : manualDecision(false, "模型不可用，未启用规则兜底");
-      source = settings.keywordFallbackEnabled ? "heuristic-fallback" : "model-error";
-      await addEvent({ type: "error", author, error: error.message, source });
-      await incrementStats("errors");
-    }
+  let decision;
+  try {
+    decision = await classifyWithModel({ author, samples, settings });
+  } catch (error) {
+    decision = manualDecision(false, "本机 LLM 不可用，未处理");
+    await addEvent({ type: "error", author, error: error.message, source: "local-llm-error" });
+    await incrementStats("errors");
+    return makeResponse("allowed", { author, key, decision, source: "local-llm-error", settings });
   }
 
   const finalDecision = {
     ...decision,
     shouldBlock: decision.shouldBlock && decision.score >= settings.threshold && decision.confidence >= settings.confidenceFloor,
-    source,
+    source: "local-llm",
     samplesHash: hashText(joinedText),
     createdAt: Date.now(),
     expiresAt: Date.now() + settings.cacheTtlHours * 60 * 60 * 1000
@@ -164,14 +165,14 @@ async function runAnalysis({ payload, author, key, settings }) {
     type: finalDecision.shouldBlock ? "blocked" : "allowed",
     author,
     decision: finalDecision,
-    source
+    source: "local-llm"
   });
 
   return makeResponse(finalDecision.shouldBlock ? "blocked" : "allowed", {
     author,
     key,
     decision: finalDecision,
-    source,
+    source: "local-llm",
     settings
   });
 }
@@ -193,6 +194,7 @@ async function classifyWithModel({ author, samples, settings }) {
     temperature: 0,
     max_tokens: 240,
     stream: false,
+    think: false,
     response_format: { type: "json_object" }
   };
 
@@ -208,10 +210,6 @@ async function classifyWithModel({ author, samples, settings }) {
 
 async function postChatCompletion(settings, body, allowRetryWithoutJsonMode) {
   const headers = { "Content-Type": "application/json" };
-  if (settings.apiKey) {
-    headers.Authorization = `Bearer ${settings.apiKey}`;
-  }
-
   const response = await fetch(settings.endpoint, {
     method: "POST",
     headers,
@@ -279,6 +277,9 @@ async function fetchRecentSamples(authorUrl, limit, charLimit) {
 
 async function testModel(payload) {
   const settings = mergeSettings({ ...(await getSettings()), ...(payload.settings || {}) });
+  if (!settings.endpoint || !settings.model) {
+    return { ok: false, error: "请先配置本机 LLM endpoint 和模型名" };
+  }
   const samples = [
     {
       title: "测试样本",
@@ -288,17 +289,17 @@ async function testModel(payload) {
     }
   ];
   const author = { name: "测试作者", url: "https://www.zhihu.com/people/test-user" };
-  const heuristic = heuristicDecision({ samples });
-
-  if (!settings.aiEnabled || !settings.endpoint || !settings.model) {
-    return { ok: true, decision: heuristic, source: "heuristic" };
-  }
-
   const modelDecision = await classifyWithModel({ author, samples, settings });
   return {
     ok: true,
-    decision: combineDecisions(modelDecision, heuristic, settings.threshold, settings.confidenceFloor),
-    source: "model"
+    decision: {
+      ...modelDecision,
+      shouldBlock:
+        modelDecision.shouldBlock &&
+        modelDecision.score >= settings.threshold &&
+        modelDecision.confidence >= settings.confidenceFloor
+    },
+    source: "local-llm"
   };
 }
 

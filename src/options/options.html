@@ -24,32 +24,24 @@
             <span>启用自动屏蔽</span>
           </label>
           <label class="check">
-            <input id="aiEnabled" type="checkbox">
-            <span>启用模型判断</span>
-          </label>
-          <label class="check">
             <input id="fetchRecentContent" type="checkbox">
             <span>读取作者近作</span>
           </label>
           <label class="check">
-            <input id="keywordFallbackEnabled" type="checkbox">
-            <span>模型失败时启用规则兜底</span>
+            <input id="guestMode" type="checkbox">
+            <span>未登录时处理公开内容</span>
           </label>
         </section>
 
         <section class="section">
-          <h2>模型接口</h2>
+          <h2>本机 LLM</h2>
           <label>
             <span>Endpoint</span>
             <input id="endpoint" type="url" placeholder="http://127.0.0.1:11434/v1/chat/completions">
           </label>
           <label>
             <span>模型名</span>
-            <input id="model" type="text" placeholder="qwen3:0.6b">
-          </label>
-          <label>
-            <span>API Key</span>
-            <input id="apiKey" type="password" autocomplete="off" placeholder="本地模型可留空">
+            <input id="model" type="text" placeholder="qwen2.5:0.5b">
           </label>
           <div class="inline-actions">
             <button id="testModel" type="button">测试模型</button>
@@ -114,8 +106,8 @@
 
         <section class="section wide note">
           <h2>隐私边界</h2>
-          <p>扩展默认只把样本文本发给你配置的模型接口。推荐使用本机 Ollama、LM Studio、vLLM 或其他自托管 OpenAI-compatible 服务。</p>
-          <p>由于浏览器扩展权限限制，远程自定义接口需要出现在 <code>manifest.json</code> 的 <code>host_permissions</code> 中；常见本地地址和几个主流兼容接口已经预置。</p>
+          <p>扩展只把样本文本发给本机 OpenAI-compatible 模型接口。推荐使用 Ollama、LM Studio、vLLM 或其他本机服务。</p>
+          <p>游客兼容只处理知乎已经公开加载到页面里的内容，不伪造登录态，不调用绕过登录或访问限制的第三方代码。</p>
         </section>
       </form>
 

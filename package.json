@@ -1,6 +1,6 @@
 {
   "name": "zhihu-ai-shield",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "知乎 AI 清净器：用本地或私有模型自动识别并屏蔽低质量知乎作者。",

@@ -44,7 +44,7 @@ function render(status) {
   elements.blocked.textContent = String(stats.blocked || 0);
   elements.scanned.textContent = String(stats.scanned || 0);
   elements.decisionCount.textContent = String(status.decisionCount || 0);
-  elements.model.textContent = settings.aiEnabled ? settings.model || "未配置" : "规则模式";
+  elements.model.textContent = settings.model || "未配置";
   elements.threshold.textContent = `${Math.round(settings.threshold * 100)}%`;
   elements.hideMode.textContent = modeLabel(settings.hideMode);
   renderEvents(status.events || []);

@@ -128,7 +128,8 @@
       author,
       title: extractTitle(card),
       excerpt: extractBody(card),
-      pageUrl: location.href
+      pageUrl: location.href,
+      guestVisible: detectGuestLoginPrompt()
     };
 
     const response = await chrome.runtime.sendMessage({
@@ -212,7 +213,7 @@
     const decision = response.decision || {};
     const score = Number.isFinite(decision.score) ? Math.round(decision.score * 100) : 0;
     const labels = Array.isArray(decision.labels) ? decision.labels.slice(0, 3) : [];
-    const reason = response.showReason ? escapeHtml(decision.reason || "低质量内容风险较高") : "已按你的规则屏蔽";
+    const reason = response.showReason ? escapeHtml(decision.reason || "低质量内容风险较高") : "已按本机 LLM 屏蔽";
     const tagHtml = labels.map((label) => `<span class="zas-tag">${escapeHtml(label)}</span>`).join("");
 
     return `
@@ -246,6 +247,11 @@
     } catch {
       return {};
     }
+  }
+
+  function detectGuestLoginPrompt() {
+    const text = cleanText(document.body?.textContent || "").slice(0, 20000);
+    return /登录后|登录知乎|注册知乎|打开知乎 App|下载知乎 App/.test(text);
   }
 
   function cleanText(value) {

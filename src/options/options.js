@@ -1,11 +1,9 @@
 const fields = {
   enabled: document.querySelector("#enabled"),
-  aiEnabled: document.querySelector("#aiEnabled"),
   fetchRecentContent: document.querySelector("#fetchRecentContent"),
-  keywordFallbackEnabled: document.querySelector("#keywordFallbackEnabled"),
+  guestMode: document.querySelector("#guestMode"),
   endpoint: document.querySelector("#endpoint"),
   model: document.querySelector("#model"),
-  apiKey: document.querySelector("#apiKey"),
   threshold: document.querySelector("#threshold"),
   confidenceFloor: document.querySelector("#confidenceFloor"),
   maxSamples: document.querySelector("#maxSamples"),
@@ -45,12 +43,10 @@ async function load() {
 
 function fill(settings) {
   fields.enabled.checked = Boolean(settings.enabled);
-  fields.aiEnabled.checked = Boolean(settings.aiEnabled);
   fields.fetchRecentContent.checked = Boolean(settings.fetchRecentContent);
-  fields.keywordFallbackEnabled.checked = Boolean(settings.keywordFallbackEnabled);
+  fields.guestMode.checked = Boolean(settings.guestMode);
   fields.endpoint.value = settings.endpoint || "";
   fields.model.value = settings.model || "";
-  fields.apiKey.value = settings.apiKey || "";
   fields.threshold.value = settings.threshold;
   fields.confidenceFloor.value = settings.confidenceFloor;
   fields.maxSamples.value = settings.maxSamples;
@@ -104,12 +100,10 @@ async function exportData() {
 function readForm() {
   return {
     enabled: fields.enabled.checked,
-    aiEnabled: fields.aiEnabled.checked,
     fetchRecentContent: fields.fetchRecentContent.checked,
-    keywordFallbackEnabled: fields.keywordFallbackEnabled.checked,
+    guestMode: fields.guestMode.checked,
     endpoint: fields.endpoint.value.trim(),
     model: fields.model.value.trim(),
-    apiKey: fields.apiKey.value.trim(),
     threshold: Number(fields.threshold.value),
     confidenceFloor: Number(fields.confidenceFloor.value),
     maxSamples: Number(fields.maxSamples.value),
